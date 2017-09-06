@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:id="@+id/selection_group">
+        <item
+            android:id="@+id/delete_project"
+            android:icon="@drawable/ic_action_delete"
+            android:orderInCategory="1"
+            android:title="@string/delete"
+            android:visible="false"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/rename_project"
+            android:icon="@drawable/ic_action_rename"
+            android:orderInCategory="2"
+            android:title="@string/rename"
+            android:visible="false"
+            app:showAsAction="ifRoom"/>
+    </group>
+
+    <item
+        android:id="@+id/sort_by"
+        android:icon="@drawable/ic_action_sort"
+        android:orderInCategory="1"
+        android:title="@string/sort_by"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/by_name"
+                    android:title="@string/by_name"/>
+                <item
+                    android:id="@+id/by_date"
+                    android:title="@string/by_date"/>
+                <item
+                    android:id="@+id/by_area"
+                    android:title="@string/by_area"/>
+            </group>
+
+        </menu>
+    </item>
+</menu>

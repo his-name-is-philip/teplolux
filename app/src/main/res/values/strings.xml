@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">Расчет теплопотерь</string>
+
+    <string name="nav_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="nav_drawer_close" translatable="false">Close navigation drawer</string>
+
+    <string name="nav_header">Расчет:</string>
+    <string name="nav_header2">Расчет, Вт:</string>
+    <string name="degree" translatable="false">°C</string>
+    <string name="m">м</string>
+    <string name="cm">см</string>
+    <string name="width">Толщина:</string>
+    <string name="addLayout">+ Добавить слой</string>
+    <string name="reduceLayout">— Удалить слой</string>
+    <string name="length">Длина:</string>
+    <string name="glass_area">Площадь остекления:</string>
+    <string name="fl_depth">Заглубление:</string>
+    <string name="is_it_outside">наружняя стена</string>
+    <string name="area_n_power"><![CDATA[%1$.1f м<sup><small><small>2</small></small></sup>]]>, %2$s</string>
+    <string name="area_value"><![CDATA[%1$.1f м<sup><small><small>2</small></small></sup>]]></string>
+    <string name="areaUnit"><![CDATA[м<sup><small><small>2</small></small></sup>]]></string>
+    <string name="number" translatable="false">frNumb</string>
+    <string name="wHeatLoss">Теплопотери стен: %.1f</string>
+    <string name="cHeatLoss">Теплопотери потолка: %.1f</string>
+    <string name="fHeatLoss">Теплопотери пола: %.1f</string>
+    <string name="winHeatLoss">Теплопотери окон: %.1f</string>
+    <string name="heatLoss">Всего теплопотерь: %.1f</string>
+    <string name="al_win">Алюминевый переплет</string>
+    <string name="selected_city" formatted="false">Выбранный город: %s (-%d°C)</string>
+    <string name="selected_temper">Температура на улице: -%d°C</string>
+    <string name="selected_temper2">Температура на улице: %d°C</string>
+    <string name="grunt">По грунту</string>
+    <string name="logs">По лагам</string>
+    <string name="with_underground">Над подпольем</string>
+    <string name="heated_basement">В отапливаемом подвале</string>
+    <string name="interfloor">Междуэтажное перекрытие</string>
+    <string name="with_insul">С утеплением</string>
+    <string name="enter_temper">Ввести температуру на улице вручную…</string>
+    <string name="enter_city">Введите свой город</string>
+    <string name="crash_message">Произошла ошибка. Отправка отчета</string>
+    <string name="floor">Пол</string>
+    <string name="ceiling">Потолок</string>
+    <string name="cold_attic">Над комнатой холодный чердак.</string>
+    <string name="height">Высота потолка:</string>
+    <string name="inside_temperature">Внутренняя температура:</string>
+    <string name="title_activity_start" translatable="false">StartActivity</string>
+
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="enter">Готово</string>
+    <string name="project_name_hint">Название проекта</string>
+    <string name="room_name_hint">Название помещения</string>
+    <string name="project_list">Список проектов</string>
+    <string name="no_saved_projects">Нет сохраненных проектов.\n\nЧтобы создать новый проект, нажмите \"+\".</string>
+    <string name="no_saved_rooms">Нет сохраненных помещений.\n\nЧтобы создать новое помещение, нажмите \"+\".</string>
+    <string name="delete">Удалить</string>
+    <string name="rename">Переименовать</string>
+    <string name="heatLoss_ofTheWindows">Теплопотери окон:</string>
+    <string name="heatLoss_full">Все теплопотери:</string>
+    <string name="heatLoss_ofTheFloor">Теплопотери пола:</string>
+    <string name="heatLoss_ofTheCeiling">Теплопотери потолка:</string>
+    <string name="heatLoss_ofTheWalls">Теплопотери стен:</string>
+    <string name="sort_by">Сортировать по</string>
+    <string name="by_date">По дате</string>
+    <string name="by_area">По площади</string>
+    <string name="by_name">По названию</string>
+    <string name="Place">Помещение: %s</string>
+    <string name="Project">Проект: %s</string>
+    <string name="power_unit">%.1f кВт</string>
+    <string name="no_saved_rooms_in_the_p">Нет сохраненных комнат</string>
+    <string name="room_ve_not_saved">Комната не сохраннена</string>
+</resources>

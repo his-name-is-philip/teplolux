@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                                            xmlns:tools="http://schemas.android.com/tools"
+                                            android:id="@+id/scrollView"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/wall_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <CheckBox
+            android:id="@+id/isOutside_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/is_it_outside"
+            android:textSize="@dimen/cb_textSize"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/separator_bottom_margin"
+            android:layout_marginTop="@dimen/separator_top_margin"
+            android:background="@color/separatorColor"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/length"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/length_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="numberDecimal"
+                android:maxLength="3"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"
+                android:nextFocusDown="@+id/insulThick_et"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/m"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/sepAfterL"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/separator_bottom_margin"
+            android:layout_marginTop="@dimen/separator_top_margin"
+            android:background="@color/separatorColor"/>
+
+        <android.widget.Spinner
+            android:id="@+id/matSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spinner_marginTop"
+            android:spinnerMode="dialog"
+            tools:ignore="UnusedAttribute"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/insulThick_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <android.widget.Spinner
+            android:id="@+id/adv_sp2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spinner_marginTop"
+            android:spinnerMode="dialog"
+            android:visibility="gone"
+            tools:ignore="UnusedAttribute"/>
+
+        <LinearLayout
+            android:id="@+id/advL2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/adv_et2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <android.widget.Spinner
+            android:id="@+id/adv_sp3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spinner_marginTop"
+            android:spinnerMode="dialog"
+            android:visibility="gone"
+            tools:ignore="UnusedAttribute"/>
+
+        <LinearLayout
+            android:id="@+id/advL3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/adv_et3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/plusInsulant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addLayout"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/button_txtSize"/>
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/minusInsulant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reduceLayout"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/button_txtSize"/>
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/separator_bottom_margin"
+            android:layout_marginTop="@dimen/separator_top_margin"
+            android:background="@color/separatorColor"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/glass_area"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/glassArea_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusableInTouchMode="true"
+                android:hint="0"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"
+                tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/unitOfArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

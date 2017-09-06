@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ru.obrazcenter.teplolux.MyRippleView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/all_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:clickable="true"
+    android:minHeight="72dp"
+    android:paddingBottom="18dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="18dp"
+    app:rv_color="@color/rippleColor"
+    app:rv_rippleDuration="60"
+    >
+
+    <TextView
+        android:id="@+id/name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        tools:text="NameNameNameName"/>
+
+    <TextView
+        android:id="@+id/area_sum_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/name_tv"
+        android:layout_gravity="center_vertical"
+        tools:text="Сумма площадей"/>
+
+    <TextView
+        android:id="@+id/date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/area_sum_tv"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        tools:text="01.10.17"/>
+
+</ru.obrazcenter.teplolux.MyRippleView>

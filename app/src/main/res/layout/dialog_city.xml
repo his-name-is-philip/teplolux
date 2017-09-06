@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="20dp"
+    android:id="@+id/city_layout"
+    android:focusableInTouchMode="true">
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/city_et"
+        android:inputType="textCapSentences"
+        android:hint="@string/enter_city"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/borderlessButtonStyle"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/enter_temper_btn"
+        android:text="@string/enter_temper"
+        android:textColor="@color/forBtns"/>
+
+</LinearLayout>

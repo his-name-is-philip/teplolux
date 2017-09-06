@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:text="@string/inside_temperature"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/insideTemp_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:descendantFocusability="beforeDescendants"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/degree"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/separator_bottom_margin"
+            android:layout_marginTop="@dimen/separator_top_margin"
+            android:background="@color/separatorColor"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/height"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/cHeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="numberDecimal"
+                android:maxLength="4"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"
+                android:imeOptions="actionNext"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/m"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/separator_bottom_margin"
+            android:layout_marginTop="@dimen/separator_top_margin"
+            android:background="@color/separatorColor"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ceiling"
+            android:textColor="@color/headerColor"
+            android:textSize="@dimen/header_size"/>
+
+        <CheckBox
+            android:id="@+id/outerC_cb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/cold_attic"
+            android:textSize="@dimen/cb_textSize"/>
+
+        <android.widget.Spinner
+            android:id="@+id/ceilingSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:spinnerMode="dialog"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/ceilThickness_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <android.widget.Spinner
+            android:id="@+id/advC_sp2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/ceilMaterials"
+            android:spinnerMode="dialog"
+            android:visibility="gone"
+            tools:ignore="UnusedAttribute"/>
+
+        <LinearLayout
+            android:id="@+id/advC_L2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/advC_et2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <android.widget.Spinner
+            android:id="@+id/advC_sp3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/ceilMaterials"
+            android:spinnerMode="dialog"
+            android:visibility="gone"
+            tools:ignore="UnusedAttribute"/>
+
+        <LinearLayout
+            android:id="@+id/advC_L3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/advC_et3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/plusCeiling"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addLayout"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/button_txtSize"/>
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/minusCeiling"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/reduceLayout"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/button_txtSize"/>
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/separator_bottom_margin"
+            android:layout_marginTop="@dimen/separator_top_margin"
+            android:background="@color/separatorColor"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/floor"
+            android:textColor="@color/headerColor"
+            android:textSize="@dimen/header_size"/>
+
+        <RadioGroup
+            android:id="@+id/fType_rg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RadioButton
+                android:id="@+id/rb0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/with_underground"/>
+
+            <RadioButton
+                android:id="@+id/rb1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/grunt"/>
+
+            <RadioButton
+                android:id="@+id/rb2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/logs"/>
+
+            <!--<RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/heated_basement"
+                android:id="@+id/rb3"/>-->
+
+            <RadioButton
+                android:id="@+id/rb4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/interfloor"/>
+        </RadioGroup>
+
+        <CheckBox
+            android:id="@+id/isInsul_cb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/with_insul"
+            android:textSize="@dimen/cb_textSize"
+            android:visibility="gone"/>
+
+        <android.widget.Spinner
+            android:id="@+id/floorSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/floorThickness_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+
+        <android.widget.Spinner
+            android:id="@+id/advF_sp2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/advF_L2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/advF_et2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <android.widget.Spinner
+            android:id="@+id/advF_sp3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/floorMaterials"
+            android:spinnerMode="dialog"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/advF_L3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/width"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:id="@+id/advF_et3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cm"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/plusFloor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addLayout"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/button_txtSize"/>
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/minusFloor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reduceLayout"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/button_txtSize"/>
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fl_depth"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+
+            <EditText
+                android:focusable="true"
+                android:id="@+id/flDepth_et"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_rightFor_et"
+                android:layout_marginLeft="@dimen/margin_leftFor_et"
+                android:layout_marginRight="@dimen/margin_rightFor_et"
+                android:layout_marginStart="@dimen/margin_leftFor_et"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minEms="1"
+                android:textSize="@dimen/param_size"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/m"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/param_size"/>
+        </LinearLayout>-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/separator_bottom_margin"
+            android:layout_marginTop="@dimen/separator_top_margin"
+            android:background="@color/separatorColor"/>
+
+        <Spinner
+            android:id="@+id/windowTypesSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            tools:ignore="UnusedAttribute"/>
+
+        <CheckBox
+            android:id="@+id/al_cb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/al_win"
+            android:textSize="@dimen/cb_textSize"/>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

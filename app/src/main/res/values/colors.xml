@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#2d3b96</color>
+    <color name="colorAccent">#4fb387</color>
+    <color name="colorForSelectTab">#e9f6f7</color>
+
+    <color name="headerColor">#256643</color>
+    <color name="myCustomColor">#55b350</color>
+    <color name="separatorColor">#69000000</color>
+    <color name="red">#e00</color>
+    <color name="list_background">#f8f8f8</color>
+    <color name="forBtns">#1e88e5</color>
+    <color name="grayBackground">#fafafa</color>
+    <color name="pressedBackground">#eeeeee</color>
+    <color name="rippleColor">#e0e0e0</color>
+</resources>

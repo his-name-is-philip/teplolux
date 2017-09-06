@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ceilMaterials">
+        <item>МинВата</item>
+        <item>Пенополистирол</item>
+        <item>Дерево</item>
+        <item>Выберите материал</item>
+    </string-array>
+
+    <string-array name="floorMaterials">
+        <item>МинВата</item>
+        <item>Пенополистирол</item>
+        <item>Дерево</item>
+        <item>Выберите материал</item>
+    </string-array>
+
+    <string-array name="wallMaterials">
+        <item>Силикатный кирпич</item>
+        <item>Теплая керамика</item>
+        <item>МинВата</item>
+        <item>Пенополистирол</item>
+        <item>Дерево (сосна)</item>
+        <item>Газосиликат</item>
+        <item>Пустотелый кирпич</item>
+        <item>Пеноблок Д 600</item>
+        <item>Пеноблок Д 800</item>
+        <item>Выберите материал</item>
+    </string-array>
+
+    <string-array name="windowTypes">
+        <item>Обычное (двойное) остекление</item>
+        <item>1-камерный стеклопакет</item>
+        <item>1-камерный ст-т с i покрытием</item>
+        <item>2-камерный стеклопакет</item>
+        <item>2-камерный ст-т с i покрытием</item>
+    </string-array>
+
+    <integer-array name="cityVals">
+        <item>25</item>
+        <item>24</item>
+        <item>37</item>
+        <item>32</item>
+        <item>31</item>
+        <item>32</item>
+        <item>34</item>
+        <item>37</item>
+        <item>30</item>
+        <item>19</item>
+        <item>33</item>
+        <item>37</item>
+        <item>35</item>
+        <item>24</item>
+        <item>22</item>
+        <item>14</item>
+        <item>25</item>
+        <item>35</item>
+        <item>33</item>
+        <item>36</item>
+        <item>33</item>
+        <item>31</item>
+        <item>29</item>
+        <item>31</item>
+        <item>24</item>
+        <item>13</item>
+        <item>43</item>
+        <item>32</item>
+        <item>39</item>
+        <item>27</item>
+        <item>21</item>
+        <item>27</item>
+        <item>27</item>
+        <item>33</item>
+        <item>27</item>
+        <item>32</item>
+        <item>19</item>
+        <item>24</item>
+        <item>32</item>
+        <item>29</item>
+        <item>23</item>
+        <item>30</item>
+        <item>24</item>
+        <item>23</item>
+        <item>28</item>
+        <item>33</item>
+        <item>43</item>
+        <item>38</item>
+        <item>27</item>
+        <item>15</item>
+        <item>27</item>
+        <item>36</item>
+        <item>25</item>
+        <item>32</item>
+        <item>30</item>
+        <item>13</item>
+        <item>52</item>
+        <item>30</item>
+        <item>28</item>
+        <item>17</item>
+        <item>28</item>
+        <item>31</item>
+        <item>33</item>
+        <item>36</item>
+        <item>18</item>
+        <item>33</item>
+        <item>27</item>
+        <item>26</item>
+        <item>22</item>
+        <item>18</item>
+        <item>39</item>
+        <item>19</item>
+        <item>18</item>
+        <item>47</item>
+        <item>23</item>
+    </integer-array>
+    <string-array name="cites">
+        <item>Москва</item><!--25-->
+        <item>Санкт-Питербург</item><!--24-->
+        <item>Новосибирск</item><!--37-->
+        <item>Екатеринбург</item><!--32-->
+        <item>Нижний Новгород</item><!--31-->
+        <item>Казань</item><!--32-->
+        <item>Челябинск</item><!--34-->
+        <item>Омск</item><!--37-->
+        <item>Самара</item><!--30-->
+        <item>Ростов-на-Дону</item><!--19-->
+        <item>Уфа</item><!--33-->
+        <item>Красноярск</item><!--37-->
+        <item>Пермь</item><!--35-->
+        <item>Воронеж</item><!--24-->
+        <item>Волгоград</item><!--22-->
+        <item>Краснодар</item><!--14-->
+        <item>Саратов</item><!--25-->
+        <item>Тюмень</item><!--35-->
+        <!--item>Тольятти</item-->
+        <item>Ижевск</item><!--33-->
+        <item>Барнаул</item><!--36-->
+        <item>Иркутск</item><!--33-->
+        <item>Ульяновск</item><!--31-->
+        <item>Хабаровск</item><!--29-->
+        <item>Ярославль</item><!--31-->
+        <item>Владивосток</item><!--24-->
+        <item>Махачкала</item><!--13-->
+        <item>Томск</item><!--43-->
+        <item>Оренбург</item><!--32-->
+        <item>Кемерово</item><!--39-->
+        <!--item>Новокузнецк</item-->
+        <item>Рязань</item><!--27-->
+        <item>Астрахань</item><!--21-->
+        <!--item>Набережные Челны</item-->
+        <item>Пенза</item><!--27-->
+        <item>Липецк</item><!--27-->
+        <item>Киров</item><!--33-->
+        <item>Тула</item><!--27-->
+        <item>Чебоксары</item><!--32-->
+        <item>Калининград</item><!--19-->
+        <item>Курск</item><!--24-->
+        <!--item>Улан-Удэ</item-->
+        <item>Ставрополь</item><!--32-->
+        <!--item>Балашиха</item>
+        <item>Магнитогорск</item-->
+        <item>Тверь</item><!--29-->
+        <item>Севастополь</item><!--23-->
+        <item>Иваново</item><!--30-->
+        <item>Брянск</item><!--24-->
+        <!--item>Сочи</item-->
+        <item>Белгород</item><!--23-->
+        <!--item>Нижний Тагил</item-->
+        <item>Владимир</item><!--28-->
+        <item>Архангельск</item><!--33-->
+        <item>Сургут</item><!--?-->
+        <item>Чита</item><!--38-->
+        <item>Калуга</item><!--27-->
+        <item>Симферополь</item><!--15-->
+        <item>Смоленск</item><!--27-->
+        <!--item>Волжский</item-->
+        <item>Курган</item><!--36-->
+        <item>Орёл</item><!--25-->
+        <!--item>Череповец</item-->
+        <item>Вологда</item><!--32-->
+        <item>Саранск</item><!--30-->
+        <item>Владикавказ</item><!--13-->
+        <item>Якутск</item><!--52-->
+        <item>Мурманск</item><!--30-->
+        <!--item>Подольск</item-->
+        <item>Тамбов</item><!--28-->
+        <item>Грозный</item><!--17-->
+        <!--item>Стерлитамак</item-->
+        <item>Петрозаводск</item><!--28-->
+        <item>Кострома</item><!--31-->
+        <!--item>Нижневартовск</item>
+        <item>Новороссийск</item-->
+        <item>Йошкар-Ола</item><!--33-->
+        <!--item>Комсомольск-на-Амуре</item>
+        <item>Таганрог</item-->
+        <item>Сыктывкар</item><!--36-->
+        <!--item>Химки</item-->
+        <item>Нальчик</item><!--?-->
+        <!--item>Шахты</item>
+        <item>Нижнекамск</item>
+        <item>Братск</item>
+        <item>Дзержинск</item>
+        <item>Орск</item>
+        <item>Ангарск</item-->
+        <item>Благовещенск</item><!--33-->
+        <!--item>Энгельс</item>
+        <item>Старый Оскол</item-->
+        <item>Новгород Великий</item><!--27-->
+        <!--item>Королёв</item-->
+        <item>Псков</item><!--26-->
+        <!--item>Бийск</item>
+        <item>Мытищи</item>
+        <item>Прокопьевск</item-->
+        <item>Южно-Сахалинск</item><!--22-->
+        <!--item>Балаково</item>
+        <item>Рыбинск</item>
+        <item>Армавир</item>
+        <item>Люберцы</item>
+        <item>Северодвинск</item-->
+        <item>Петропавловск-Камчатский</item><!--18-->
+        <item>Абакан</item><!--39-->
+        <!--item>Норильск</item>
+        <item>Сызрань</item>
+        <item>Волгодонск</item>
+        <item>Новочеркасск</item>
+        <item>Каменьск-Уральский</item>
+        <item>Златоуст</item>
+        <item>Уссурийск</item>
+        <item>Электросталь</item>
+        <item>Салават</item>
+        <item>Находка</item>
+        <item>Альметьевск</item>
+        <item>Миасс</item>
+        <item>Керчь</item>
+        <item>Березники</item>
+        <item>Рубцовск</item>
+        <item>Копейск</item>
+        <item>Пятигорск</item>
+        <item>Красногорск</item-->
+        <item>Майкоп</item><!--19-->
+        <!--item>Коломна</item>
+        <item>Одинцова</item>
+        <item>Ковров</item>
+        <item>Хасавюрт</item>
+        <item>Кисловодск</item>
+        <item>Серпухов</item>
+        <item>Новомосковск</item>
+        <item>Невтекамск</item>
+        <item>Новочебоксарск</item>
+        <item>Нефтеюганск</item>
+        <item>Первоуральск</item>
+        <item>Щелково</item-->
+        <item>Черкесск</item><!--18-->
+        <!--item>Дербент</item>
+        <item>Батайск</item>
+        <item>Орехово-Зуево</item>
+        <item>Невинномысск</item>
+        <item>Домодедово</item>
+        <item>Димитровград</item-->
+        <item>Кызыл</item><!--47-->
+        <!--item>Октябрьский</item-->
+<!--        <item>Назрань</item>&lt;!&ndash;?&ndash;&gt;-->
+        <!--item>Камышин</item>
+        <item>Обнинск</item>
+        <item>Новый Уренгой</item>
+        <item>Муром</item>
+        <item>Раменское</item>
+        <item>Новошахтинск</item>
+        <item>Жуковский</item>
+        <item>Северск</item>
+        <item>Пушкино</item-->
+<!--        <item>Ноябрьск</item>&lt;!&ndash;?&ndash;&gt;-->
+        <!--item>Евпатория</item>
+        <item>Ессентуки</item>
+        <item>Елеч</item>
+        <item>Ачинск</item>
+        <item>Артем</item>
+        <item>Сергиев Посад</item>
+        <item>Арзамас</item-->
+        <item>Элиста</item><!--23-->
+        <!--item>Новокуйбышевск</item>
+        <item>Бердск</item>
+        <item>Ногинск</item>
+        <item>Долгопрудный</item-->
+    </string-array>
+
+    <string-array name="floorTypes">
+        <item>Над подпольем</item>
+        <item>По грунту</item>
+        <item>Отапливаемый подвал</item>
+        <item>Междуэтажное перекрытие</item>
+    </string-array>
+</resources>

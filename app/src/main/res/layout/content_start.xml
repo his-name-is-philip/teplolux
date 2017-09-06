@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--ActionBar height == 56dp-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:context="ru.obrazcenter.teplolux.StartActivity"
+    tools:showIn="@layout/app_bar_start"
+    >
+    <!--
+    android:paddingTop="8dp"
+    android:paddingBottom="12dp"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginTop="68dp"-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/projects_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top|center_horizontal"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"/>
+
+    <TextView
+        android:id="@+id/noElements_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="36dp"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/bmOfRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top|center_horizontal"
+        android:scaleType="fitEnd"
+        android:visibility="gone"
+        tools:ignore="ContentDescription"/>
+</FrameLayout>
