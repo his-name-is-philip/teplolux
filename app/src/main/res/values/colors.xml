@@ -12,6 +12,6 @@
     <color name="list_background">#f8f8f8</color>
     <color name="forBtns">#1e88e5</color>
     <color name="grayBackground">#fafafa</color>
-    <color name="pressedBackground">#eeeeee</color>
+    <color name="pressedBackground">#f2f2f2</color>
     <color name="rippleColor">#e0e0e0</color>
 </resources>

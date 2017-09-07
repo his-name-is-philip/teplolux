@@ -19,6 +19,7 @@
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".StartActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|locale|mcc|mnc|touchscreen|navigation|screenLayout|fontScale|uiMode|smallestScreenSize"
             android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

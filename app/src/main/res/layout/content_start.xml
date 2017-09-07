@@ -37,14 +37,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="36dp"
-        android:visibility="gone"/>
-
     <ImageView
         android:id="@+id/bmOfRv"
         android:layout_width="match_parent"
