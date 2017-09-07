@@ -16,13 +16,13 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-        <CheckBox
+        <!--<CheckBox
             android:id="@+id/isOutside_cb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="@string/is_it_outside"
-            android:textSize="@dimen/cb_textSize"/>
+            android:textSize="@dimen/cb_textSize"/>-->
 
         <View
             android:layout_width="wrap_content"
