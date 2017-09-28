@@ -9,13 +9,13 @@
 package ru.obrazcenter.teplolux;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -41,14 +41,15 @@ import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,27 +65,40 @@ import java.util.Date;
 import ru.obrazcenter.teplolux.ProjectLogics.Place;
 import ru.obrazcenter.teplolux.ProjectLogics.PlaceList;
 
-
-import static android.graphics.Bitmap.createBitmap;
+import static android.graphics.Color.BLACK;
+import static android.graphics.Color.RED;
 import static android.graphics.Color.TRANSPARENT;
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 import static android.text.Html.fromHtml;
 import static android.view.KeyEvent.ACTION_DOWN;
+import static android.view.KeyEvent.KEYCODE_BACK;
 import static android.view.KeyEvent.KEYCODE_ENTER;
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static android.widget.Toast.LENGTH_SHORT;
 import static ru.obrazcenter.teplolux.Main.APP_PREFERENCES;
+import static ru.obrazcenter.teplolux.Main.A_PREF_CITY;
+import static ru.obrazcenter.teplolux.Main.A_PREF_COLDEST_T;
+import static ru.obrazcenter.teplolux.Main.A_PREF_EXISTS;
 import static ru.obrazcenter.teplolux.Main.A_PREF_SELECTED_COMPARATOR;
 import static ru.obrazcenter.teplolux.Main.SAVED_ROOM;
 import static ru.obrazcenter.teplolux.Main.SUBTITLE;
 import static ru.obrazcenter.teplolux.Main.TITLE;
+import static ru.obrazcenter.teplolux.ProjectLogics.deleteProject;
+import static ru.obrazcenter.teplolux.ProjectLogics.deleteRoom;
+import static ru.obrazcenter.teplolux.ProjectLogics.doesProjectContain;
 import static ru.obrazcenter.teplolux.ProjectLogics.isThereAProject;
-import static ru.obrazcenter.teplolux.ProjectLogics.isThereARoomInProject;
+import static ru.obrazcenter.teplolux.ProjectLogics.obtainProjectList;
+import static ru.obrazcenter.teplolux.ProjectLogics.obtainRoomList;
+import static ru.obrazcenter.teplolux.ProjectLogics.obtainRoomStr;
+import static ru.obrazcenter.teplolux.ProjectLogics.renameProject;
+import static ru.obrazcenter.teplolux.ProjectLogics.renameRoom;
+import static ru.obrazcenter.teplolux.ProjectLogics.saveNewProject;
 import static ru.obrazcenter.teplolux.ProjectLogics.saveNewRoom;
 import static ru.obrazcenter.teplolux.Utils.toPx;
 
+@SuppressWarnings("RestrictedApi")
 public class StartActivity extends AppCompatActivity
         implements OnClickListener, DialogInterface.OnClickListener {
 
@@ -94,17 +108,16 @@ public class StartActivity extends AppCompatActivity
     private EditText pNameET;
     private EditText rNameET;
     private Builder builder;
-    private AlertDialog alert;
-    private RecyclerView rv;
-    private View fab;
+    private RecyclerView rv1;
+    private RecyclerView rv2;
     private TextView noElementsTV;
     static String theProject = null;
-    private ImageView bmOfRv;
     private Menu menu;
-    private MenuItem sortMenuItem;
+    private MenuItem sortItem;
     private MenuItem byName;
     private MenuItem byDate;
     private MenuItem byArea;
+    private MenuItem cityItem;
 
     @SuppressLint("StaticFieldLeak")
     static StartActivity activity1;
@@ -114,18 +127,29 @@ public class StartActivity extends AppCompatActivity
     private String selectedName;
     View selectedRL;
     private boolean qq = false;
-    private AlertDialog renameAlert;
+    private AlertDialog alertNew;
+    private AlertDialog alertRename;
+    private String openedPrj;
 
     @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity1 = this;
-        setContentView(R.layout.app_bar_start);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         prefs = getPreferences(APP_PREFERENCES);
+        setContentView(R.layout.app_bar_start);
+        if (!prefs.getBoolean(A_PREF_EXISTS, false)) {
+            Editor editor = prefs.edit();
+            editor.putInt(A_PREF_COLDEST_T, 25);
+            editor.putString(A_PREF_CITY, "Москва");
+            editor.putBoolean(A_PREF_EXISTS, true);
+            editor.apply();
+            showCityDialog(true);
+        }
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        fab = findViewById(R.id.fab);
+        View fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
         pInput = (TextInputLayout) getLayoutInflater()
@@ -144,8 +168,8 @@ public class StartActivity extends AppCompatActivity
                 if (keyCode == KEYCODE_ENTER) {
                     if (event.getAction() == ACTION_DOWN) onClick(null, -1);
                     return true;
-                }
-                return false;
+                } else
+                    return false;
             }
         };
         pNameET.setOnKeyListener(keyListener);
@@ -155,13 +179,42 @@ public class StartActivity extends AppCompatActivity
         rNameET.addTextChangedListener(watcher);
 
         noElementsTV = (TextView) findViewById(R.id.noElements_tv);
-        rv = (RecyclerView) findViewById(R.id.projects_recycler_view);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        rv.setItemAnimator(new DefaultItemAnimator());
-        rv.addItemDecoration(new DividerItemDecoration(this, VERTICAL));
+        rv1 = (RecyclerView) findViewById(R.id.projects_recycler_view);
+        rv1.setLayoutManager(new LinearLayoutManager(this));
+        rv1.setItemAnimator(new DefaultItemAnimator());
+        rv1.addItemDecoration(new DividerItemDecoration(this, VERTICAL));
+
+        rv2 = (RecyclerView) findViewById(R.id.rooms_recycler_view);
+        rv2.setLayoutManager(new LinearLayoutManager(this));
+        rv2.setItemAnimator(new DefaultItemAnimator());
+        rv2.addItemDecoration(new DividerItemDecoration(this, VERTICAL));
         builder = new Builder(this).setNegativeButton("Отмена", this);
         loadProjectList();
-        bmOfRv = (ImageView) findViewById(R.id.bmOfRv);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds names to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.start, menu);
+        this.menu = menu;
+        sortItem = menu.findItem(R.id.sort_by);
+        cityItem = menu.findItem(R.id.city_item);
+
+        SubMenu subMenu = sortItem.getSubMenu();
+        byName = subMenu.findItem(R.id.by_name);
+        byDate = subMenu.findItem(R.id.by_date);
+        byArea = subMenu.findItem(R.id.by_area);
+        byName.setChecked(true);
+        sortItem.setVisible((p() ? rv1 : rv2).getAdapter().getItemCount() != 0);
+
+        final String cityStr = prefs.getString(A_PREF_CITY, null);
+        if (cityStr != null)
+            cityItem.setTitle(getString(R.string.selected_city, cityStr, prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
+        else if (prefs.getBoolean(A_PREF_EXISTS, false)) {
+            cityItem.setTitle(getString(R.string.selected_temper, prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
+        }
+
+        return true;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -170,57 +223,62 @@ public class StartActivity extends AppCompatActivity
         ActionBar bar = getSupportActionBar();
         bar.setTitle(R.string.project_list);
         bar.setDisplayHomeAsUpEnabled(false);
-        PlaceList<Place> projects = ProjectLogics.obtainProjectList(obtainSelectedComparator());
+        rv2.setVisibility(GONE);
+        PlaceList<Place> projects = obtainProjectList(obtainSelectedComparator());
         if (projects != null) {
             noElementsTV.setVisibility(GONE);
-            rv.setAdapter(new ProjectAdapter(projects));
-            rv.setVisibility(VISIBLE);
-            if (sortMenuItem != null) // else in onCreateOptionsMenu()
-                sortMenuItem.setVisible(true);
+            rv1.setAdapter(new ProjectAdapter(projects));
+            rv1.setVisibility(VISIBLE);
+            if (sortItem != null) // else in onCreateOptionsMenu()
+                sortItem.setVisible(true);
         } else {
-            rv.setAdapter(new ProjectAdapter(new PlaceList<Place>(0)));
-            rv.setVisibility(GONE);
+            rv1.setAdapter(new ProjectAdapter(new PlaceList<Place>(0)));
+            rv1.setVisibility(GONE);
             noElementsTV.setVisibility(VISIBLE);
             noElementsTV.setText(R.string.no_saved_projects);
-            if (sortMenuItem != null) // else in onCreateOptionsMenu()
-                sortMenuItem.setVisible(false);
+            if (sortItem != null) // else in onCreateOptionsMenu()
+                sortItem.setVisible(false);
         }
     }
 
     @SuppressWarnings("ConstantConditions")
-    void loadProject(String pName, boolean isFull) {
+    void loadProject(String pName, boolean isItNotEmpty, boolean animate) {
         theProject = pName;
         ActionBar bar = getSupportActionBar();
         bar.setTitle(theProject);
         bar.setDisplayHomeAsUpEnabled(true);
         if (isInSelectedItemMode) stopSelectedItemMode();
-        PlaceList<Place> rooms = !isFull ? null : ProjectLogics.obtainRoomList(
-                theProject, obtainSelectedComparator());
+        rv2.setVisibility(VISIBLE);
+        PlaceList<Place> rooms = !isItNotEmpty ? null
+                : obtainRoomList(theProject, obtainSelectedComparator());
         if (rooms != null) {
+            rv2.setAdapter(new ProjectAdapter(rooms));
             noElementsTV.setVisibility(GONE);
-            rv.setVisibility(VISIBLE);
 
-            ProjectAdapter adapter = new ProjectAdapter(rooms);
-            pOpeningAnimation(adapter);
-            if (sortMenuItem != null)
-                sortMenuItem.setVisible(true);
+            if (animate) pOpeningAnimation();
+            else {
+                rv1.setVisibility(GONE);
+                rv2.setVisibility(VISIBLE);
+            }
+
+            if (sortItem != null)
+                sortItem.setVisible(true);
         } else {
-            rv.setAdapter(new ProjectAdapter(new PlaceList<Place>(0)));
-            rv.setVisibility(GONE);
+            rv2.setAdapter(new ProjectAdapter(new PlaceList<Place>(0)));
+            rv2.setVisibility(GONE);
             noElementsTV.setText(R.string.no_saved_rooms);
             noElementsTV.setVisibility(VISIBLE);
-            if (sortMenuItem != null)
-                sortMenuItem.setVisible(false);
+            if (sortItem != null)
+                sortItem.setVisible(false);
         }
     }
 
-    private void pOpeningAnimation(ProjectAdapter adapter) {
-        bmOfRv.setVisibility(VISIBLE);
-        initRvCopy();
+    private void pOpeningAnimation() {
         AnimationSet anim = new AnimationSet(true);
-        anim.addAnimation(new TranslateAnimation(0, -0.5f, 0, 0));
-        anim.addAnimation(new ScaleAnimation(1, 0.5f, 0, 0, 0, 0));
-        anim.addAnimation(new AlphaAnimation(1, 0));
+        int p = Animation.RELATIVE_TO_SELF;
+        anim.addAnimation(new TranslateAnimation(p, 0f, p, -1f, p, 0f, p, 0f));
+//        anim.addAnimation(new ScaleAnimation(1, 0.5f, 0, 0, 0, 0));
+//        anim.addAnimation(new AlphaAnimation(1, 0));
         anim.setDuration(3000);
         anim.setAnimationListener(new AnimationListener() {
             public void onAnimationStart(Animation animation) {
@@ -231,17 +289,18 @@ public class StartActivity extends AppCompatActivity
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                bmOfRv.setVisibility(GONE);
+                rv1.setVisibility(GONE);
+                rv1.setTranslationX(0);
             }
-        }); // Switch off copy of recyclerView
-        bmOfRv.startAnimation(anim);
-        rv.setAdapter(adapter);
+        });
+        rv2.startAnimation(anim);
 
         AnimationSet anim2 = new AnimationSet(true);
-        anim2.addAnimation(new TranslateAnimation(0.5f, 0, 0, 0));
-        anim2.addAnimation(new AlphaAnimation(0, 1));
+        anim2.addAnimation(new TranslateAnimation(p, 1f, p, 0f, p, 0f, p, 0f));
+//        anim2.addAnimation(new AlphaAnimation(0, 1));
         anim2.setDuration(3000);
-        rv.startAnimation(anim2);
+        rv1.setTranslationX(rv1.getRight() - rv1.getLeft());
+        rv1.startAnimation(anim2);
     }
 
     @Override
@@ -251,7 +310,7 @@ public class StartActivity extends AppCompatActivity
                 if (isInSelectedItemMode)
                     stopSelectedItemMode();
                 initDialog();
-                alert.show();
+                alertNew.show();
                 break;
             default:
                 onClick(null, -1);
@@ -280,19 +339,19 @@ public class StartActivity extends AppCompatActivity
                         pNameET.setText(null);
                 }
             });
-            alert = builder.create();
-            alert.getWindow().getAttributes().horizontalWeight = 0.8f;
-            alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            alertNew = builder.create();
+            alertNew.getWindow().getAttributes().horizontalWeight = 0.8f;
+            alertNew.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface d) {
                     pInput.setError(null);
-                    alert.getButton(-1).setVisibility(VISIBLE);
+                    alertNew.getButton(-1).setVisibility(VISIBLE);
                 }
             });
-            alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            alertNew.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface d) {
-                    alert.getButton(-1).setOnClickListener(StartActivity.this);
+                    alertNew.getButton(-1).setOnClickListener(StartActivity.this);
                 }
             });
             pNameET.post(new Runnable() {
@@ -303,25 +362,24 @@ public class StartActivity extends AppCompatActivity
             });
         } else {
             ViewParent parent = rInput.getParent();
-            if (parent != null)
-                if (parent instanceof ViewGroup)
-                    ((ViewGroup) parent).removeView(rInput);
+            if (parent != null && parent instanceof ViewGroup)
+                ((ViewGroup) parent).removeView(rInput);
             //noinspection deprecation
             builder.setView(rInput, toPx(36), toPx(12), toPx(12), toPx(12))
                     .setPositiveButton("Создать помещение", this);
-            alert = builder.create();
-            alert.getWindow().getAttributes().horizontalWeight = 0.8f;
-            alert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            alertNew = builder.create();
+            alertNew.getWindow().getAttributes().horizontalWeight = 0.8f;
+            alertNew.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface d) {
                     pInput.setError(null);
-                    alert.getButton(-1).setVisibility(VISIBLE);
+                    alertNew.getButton(-1).setVisibility(VISIBLE);
                 }
             });
-            alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            alertNew.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface d) {
-                    alert.getButton(-1).setOnClickListener(StartActivity.this);
+                    alertNew.getButton(-1).setOnClickListener(StartActivity.this);
                 }
             });
             if (rNameET.length() > 0) {
@@ -347,23 +405,23 @@ public class StartActivity extends AppCompatActivity
             String s = cs.toString();
             if (p()) if (s.length() == 0) {
                 pInput.setError("Введите название проекта");
-                alert.getButton(-1).setVisibility(INVISIBLE);
+                alertNew.getButton(-1).setVisibility(INVISIBLE);
             } else if (isThereAProject(s)) {
                 pInput.setError("Проект с таким названием уже сущесвует");
-                alert.getButton(-1).setVisibility(INVISIBLE);
+                alertNew.getButton(-1).setVisibility(INVISIBLE);
             } else {
                 pInput.setError(null);
-                alert.getButton(-1).setVisibility(VISIBLE);
+                alertNew.getButton(-1).setVisibility(VISIBLE);
             }
             else if (s.length() == 0) {
                 rInput.setError("Введите название помещения");
-                alert.getButton(-1).setVisibility(INVISIBLE);
+                alertNew.getButton(-1).setVisibility(INVISIBLE);
             } else if (Utils.getPreferences(theProject).contains(s)) {
                 rInput.setError("Помещение с таким названием уже сущесвует");
-                alert.getButton(-1).setVisibility(INVISIBLE);
+                alertNew.getButton(-1).setVisibility(INVISIBLE);
             } else {
                 rInput.setError(null);
-                alert.getButton(-1).setVisibility(VISIBLE);
+                alertNew.getButton(-1).setVisibility(VISIBLE);
             }
         }
     };
@@ -376,29 +434,28 @@ public class StartActivity extends AppCompatActivity
             if (p()) {
                 if (pNameET.length() == 0) {
                     pInput.setError("Введите название проекта");
-                    alert.getButton(-1).setVisibility(INVISIBLE);
+                    alertNew.getButton(-1).setVisibility(INVISIBLE);
                 } else {
                     String pName = pNameET.getText().toString();
                     if (isThereAProject(pName)) {
                         pInput.setError("Проект с таким названием уже сущесвует");
-                        alert.getButton(-1).setVisibility(INVISIBLE);
+                        alertNew.getButton(-1).setVisibility(INVISIBLE);
                     } else {
-                        alert.dismiss();
-                        ProjectLogics.saveNewProject(pName);
-                        loadProject(pName, false);
-                        fab.performClick();
+                        alertNew.dismiss();
+                        saveNewProject(pName);
+                        loadProject(pName, false, false);
                     }
                 }
             } else if (rNameET.length() == 0) {
                 rInput.setError("Введите название помещения");
-                alert.getButton(-1).setVisibility(INVISIBLE);
+                alertNew.getButton(-1).setVisibility(INVISIBLE);
             } else {
                 String roomName = rNameET.getText().toString();
-                if (isThereARoomInProject(roomName, theProject)) {
+                if (doesProjectContain(roomName, theProject)) {
                     rInput.setError("Помещение с таким названием уже сущесвует");
-                    alert.getButton(-1).setVisibility(INVISIBLE);
+                    alertNew.getButton(-1).setVisibility(INVISIBLE);
                 } else {
-                    alert.dismiss();
+                    alertNew.dismiss();
                     saveNewRoom(roomName, System.currentTimeMillis(), theProject);
                     loadRoom(roomName);
                 }
@@ -406,22 +463,10 @@ public class StartActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private void initRvCopy() {
-        int width = rv.getRight() - rv.getLeft();
-        int height = rv.getBottom() - rv.getTop();
-        Bitmap bm = createBitmap(width, height, Config.RGB_565);
-        rv.layout(0, 0, width, height);
-        rv.draw(new Canvas(bm));
-        bmOfRv.setImageBitmap(bm);
-    }
-
-
     @SuppressLint("InflateParams")
     void loadRoom(String roomName) {
-        rv.setVisibility(VISIBLE);
-        String roomStr = ProjectLogics.obtainRoomStr(roomName, theProject);
-
+        String roomStr = obtainRoomStr(roomName, theProject);
+        openedPrj = theProject;
         startActivity(new Intent(this, Main.class)
                 .putExtra(SAVED_ROOM, roomStr)
                 .putExtra(TITLE, roomName)
@@ -456,31 +501,16 @@ public class StartActivity extends AppCompatActivity
         selectedName = ((TextView) v.getChildAt(2)).getText().toString();
         menu.setGroupVisible(R.id.selection_group, true);
         v.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_blue_bright));
-        if (sortMenuItem != null)
-            sortMenuItem.setVisible(false);
+        if (sortItem != null)
+            sortItem.setVisible(false);
     }
 
     void stopSelectedItemMode() {
         isInSelectedItemMode = false;
         selectedRL.setBackgroundColor(TRANSPARENT);
         menu.setGroupVisible(R.id.selection_group, false);
-        if (sortMenuItem != null)
-            sortMenuItem.setVisible(true);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds names to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.start, menu);
-        this.menu = menu;
-        sortMenuItem = menu.findItem(R.id.sort_by);
-        SubMenu subMenu = sortMenuItem.getSubMenu();
-        byName = subMenu.findItem(R.id.by_name);
-        byDate = subMenu.findItem(R.id.by_date);
-        byArea = subMenu.findItem(R.id.by_area);
-        byName.setChecked(true);
-        sortMenuItem.setVisible(rv.getAdapter().getItemCount() != 0);
-        return true;
+        if (sortItem != null)
+            sortItem.setVisible(true);
     }
 
     @SuppressLint("InflateParams")
@@ -496,67 +526,82 @@ public class StartActivity extends AppCompatActivity
                 loadProjectList();
                 return true;
             case R.id.delete_project:
-                if (p()) {
-                    ProjectLogics.deleteProject(selectedName);
-                } else {
-                    ProjectLogics.deleteRoom(selectedName, theProject);
-                }
-                ProjectAdapter a = (ProjectAdapter) rv.getAdapter();
-                int pos = a.places.indexOfPlaceWithName(selectedName);
-                a.places.remove(pos);
-                rv.removeViewAt(pos);
-                a.notifyItemRemoved(pos);
-                a.notifyItemRangeChanged(pos, a.places.size());
-                if (a.places.isEmpty()) {
-                    rv.setVisibility(GONE);
-                    noElementsTV.setVisibility(VISIBLE);
-                    if (sortMenuItem != null)
-                        sortMenuItem.setVisible(false);
+                if (isInSelectedItemMode) {
+                    ProjectAdapter a = (ProjectAdapter) (p() ? rv1 : rv2).getAdapter();
+                    int pos = a.places.indexOfPlaceWithName(selectedName);
+                    if (p()) {
+                        deleteProject(selectedName);
+                        rv1.removeViewAt(pos);
+                    } else {
+                        deleteRoom(selectedName, theProject);
+                        rv2.removeViewAt(pos);
+                    }
+                    a.places.remove(pos);
+                    a.notifyItemRemoved(pos);
+                    a.notifyItemRangeChanged(pos, a.places.size());
+                    if (a.places.isEmpty()) {
+                        (p() ? rv1 : rv2).setVisibility(GONE);
+                        noElementsTV.setVisibility(VISIBLE);
+                        if (sortItem != null)
+                            sortItem.setVisible(false);
+                    }
+
+                    isInSelectedItemMode = false;
+                    selectedRL = null;
+                    menu.setGroupVisible(R.id.selection_group, false);
+                    if (sortItem != null)
+                        sortItem.setVisible(true);
                 }
                 return true;
             case R.id.rename_project: // запустить диалог выбора нового имени
-                final TextInputLayout content = (TextInputLayout) getLayoutInflater().inflate(p()
-                        ? R.layout.dialog_new_project
-                        : R.layout.dialog_new_room, null, false);
-                //noinspection deprecation
-                Builder builder = new Builder(this)
-                        .setView(content, toPx(36), toPx(12), toPx(36), toPx(12))
-                        .setTitle(p() ? "Переименовать проект" : "Переименовать комнату")
-                        .setNegativeButton("Отмена", this)
-                        .setPositiveButton("Переименовать",
-                                dialogClickListenerRename(content));
-                renameAlert = builder.create();
-                //noinspection ConstantConditions
-                content.getEditText().addTextChangedListener(new TextWatcher() {
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    public void afterTextChanged(Editable s) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int st, int b, int c) {
-                        if (s.length() == 0)
-                            if (!qq) {
-                                content.setError("Введите название "
-                                        + (p() ? "проекта" : "помещения"));
-                                alert.getButton(-1).setVisibility(INVISIBLE);
-                            } else qq = false;
-                        else if (p() ? isThereAProject(s.toString())
-                                : isThereARoomInProject(s.toString(), theProject)
-                                && !s.equals(selectedName)) {
-
-                            content.setError((p() ? "Проект" : "Помещение")
-                                    + " с таким названием уже существует");
-                            alert.getButton(-1).setVisibility(INVISIBLE);
-                        } else {
-                            content.setError(null);
-                            alert.getButton(-1).setVisibility(VISIBLE);
+                if (isInSelectedItemMode) {
+                    final TextInputLayout content = (TextInputLayout) getLayoutInflater().inflate(p()
+                            ? R.layout.dialog_new_project
+                            : R.layout.dialog_new_room, null, false);
+                    //noinspection deprecation
+                    Builder builder = new Builder(this)
+                            .setView(content, toPx(36), toPx(12), toPx(36), toPx(12))
+                            .setTitle(p() ? "Переименовать проект" : "Переименовать комнату")
+                            .setNegativeButton("Отмена", this)
+                            .setPositiveButton("Переименовать",
+                                    dialogClickListenerRename(content));
+                    alertRename = builder.create();
+                    //noinspection ConstantConditions
+                    content.getEditText().addTextChangedListener(new TextWatcher() {
+                        public void beforeTextChanged(CharSequence s, int st, int c, int a) {
                         }
-                    }
-                });
-                alert.show();
-                return true;
+
+                        public void afterTextChanged(Editable s) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int st, int b, int c) {
+                            if (s.length() == 0)
+                                if (!qq) {
+                                    content.setError("Введите название "
+                                            + (p() ? "проекта" : "помещения"));
+                                    alertRename.getButton(-1).setVisibility(INVISIBLE);
+                                } else qq = false;
+                            else if (p() ? isThereAProject(s.toString())
+                                    : doesProjectContain(s.toString(), theProject)
+                                    && !s.equals(selectedName)) {
+
+                                content.setError((p() ? "Проект" : "Помещение")
+                                        + " с таким названием уже существует");
+                                alertRename.getButton(-1).setVisibility(INVISIBLE);
+                            } else {
+                                content.setError(null);
+                                alertRename.getButton(-1).setVisibility(VISIBLE);
+                            }
+                        }
+                    });
+                    alertRename.show();
+                    return true;
+                }
+                break;
+            case R.id.city_item:
+                showCityDialog(false);
+                break;
             //region case: sortItems
             case R.id.by_name:
             case R.id.by_date:
@@ -580,7 +625,7 @@ public class StartActivity extends AppCompatActivity
                         byArea.setChecked(true);
                         break;
                 }
-                ProjectAdapter adapter = (ProjectAdapter) rv.getAdapter();
+                ProjectAdapter adapter = (ProjectAdapter) (p() ? rv1 : rv2).getAdapter();
                 Collections.sort(adapter.places, selectedComparator);
                 adapter.notifyDataSetChanged();
                 prefs.edit().putInt(A_PREF_SELECTED_COMPARATOR, selectedComparatorId).apply();
@@ -600,30 +645,30 @@ public class StartActivity extends AppCompatActivity
                 if (p()) {
                     if (et.length() == 0) {
                         input.setError("Введите новое название проекта");
-                        renameAlert.getButton(-1).setVisibility(INVISIBLE);
+                        alertRename.getButton(-1).setVisibility(INVISIBLE);
                     } else {
                         String newName = pNameET.getText().toString();
                         if (!newName.equals(selectedName))
                             if (isThereAProject(newName)) {
                                 input.setError("Проект с таким названием уже сущесвует");
-                                renameAlert.getButton(-1).setVisibility(INVISIBLE);
+                                alertRename.getButton(-1).setVisibility(INVISIBLE);
                             } else {
-                                renameAlert.dismiss();
-                                ProjectLogics.renameProject(newName, selectedName);
+                                alertRename.dismiss();
+                                renameProject(newName, selectedName);
                             }
                     }
                 } else if (et.length() == 0) {
                     input.setError("Введите новое название помещения");
-                    renameAlert.getButton(-1).setVisibility(INVISIBLE);
+                    alertRename.getButton(-1).setVisibility(INVISIBLE);
                 } else {
                     String newName = et.getText().toString();
                     if (!newName.equals(selectedName)) {
-                        if (ProjectLogics.isThereARoomInProject(newName, theProject)) {
+                        if (doesProjectContain(newName, theProject)) {
                             input.setError("Помещение с таким названием уже сущесвует");
-                            renameAlert.getButton(-1).setVisibility(INVISIBLE);
+                            alertRename.getButton(-1).setVisibility(INVISIBLE);
                         } else {
-                            renameAlert.dismiss();
-                            ProjectLogics.renameRoom(newName, selectedName, theProject);
+                            alertRename.dismiss();
+                            renameRoom(newName, selectedName, theProject);
                         }
                     }
                 }
@@ -639,11 +684,118 @@ public class StartActivity extends AppCompatActivity
             super.onBackPressed();
     }
 
-//    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//        loadProjectList();
-//    }
+//    AlertDialog firstEntryAlert;
+
+    @SuppressLint("InflateParams")
+    private void showCityDialog(boolean isItFirst) {
+        final String[] cites = getResources().getStringArray(R.array.cites);
+        View content = getLayoutInflater().inflate(R.layout.dialog_city, null, false);
+
+        final Dialog d = new Dialog(this, R.style.AppTheme);
+        d.setContentView(content);
+        d.show();
+
+
+        TextView temperBtn = (TextView) content.findViewById(R.id.enter_temper_btn);
+        temperBtn.setOnClickListener(new OnClickListener() {
+            private NumberPicker np;
+            private String[] values;
+
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.enter_temper_btn: //При клике на кнопку "Ввести температуру вручную"
+                        Utils.closeKeyBrd(StartActivity.this);
+                        Utils.closeKeyBrd2(StartActivity.this);
+                        d.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            public boolean onKey(DialogInterface d, int code, KeyEvent e) {
+                                if (code == KEYCODE_BACK) {
+                                    d.dismiss();
+                                    showCityDialog(true);
+                                    return true;
+                                } else
+                                    return false;
+                            }
+                        });
+                        View content = getLayoutInflater()
+                                .inflate(R.layout.dialog_temper, null, false);
+                        d.setContentView(content);
+
+                        np = (NumberPicker) d.findViewById(R.id.nPicker);
+                        final int minValue = 10, maxValue = -52;
+                        values = new String[minValue - maxValue + 1];
+                        int qq = minValue;
+                        for (int i = 0; qq >= maxValue; i++, qq--)
+                            values[i] = Integer.toString(qq);
+                        np.setMinValue(0);
+                        np.setMaxValue(minValue - maxValue);
+                        np.setDisplayedValues(values);
+                        np.setValue(minValue + prefs.getInt(A_PREF_COLDEST_T, 28));
+
+                        TextView enterBtn = (TextView) d.findViewById(R.id.enter_btn);
+                        assert enterBtn != null;
+                        enterBtn.setOnClickListener(this);
+                        break;
+
+                    case R.id.enter_btn: //При клике на кнопку ввода температуры на улице
+                        d.dismiss();
+                        int value = -Integer.parseInt(values[np.getValue()]);
+                        Editor editor = prefs.edit();
+                        editor.putInt(A_PREF_COLDEST_T, value);
+                        editor.putString(A_PREF_CITY, null);
+                        editor.putBoolean(A_PREF_EXISTS, true);
+                        editor.apply();
+                        cityItem.setTitle(getString(R.string.selected_temper
+                                , prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
+                        break;
+                }
+            }
+        });
+        final AutoCompleteTextView autoET =
+                (AutoCompleteTextView) content.findViewById(R.id.city_et);
+        assert autoET != null;
+        final ArrayAdapter<?> autoAdapter =
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cites);
+        autoET.setAdapter(autoAdapter);
+        autoET.setThreshold(1);
+        autoET.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
+
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                autoET.postDelayed(new Runnable() {
+                    public void run() {
+                        autoET.setTextColor(autoAdapter.getCount() == 0 ? RED : BLACK);
+                    }
+                }, 80);
+            }
+        });
+        autoET.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> p, View v, int pos, long id) {
+                Utils.closeKeyBrd2(StartActivity.this);
+                int[] arr = getResources().getIntArray(R.array.cityVals);
+                final String txt = ((TextView) v).getText().toString();
+                int index = 0;
+                while (!txt.equals(cites[index])) index++;
+                d.dismiss();
+                Editor editor = prefs.edit();
+                editor.putInt(A_PREF_COLDEST_T, arr[index]);
+                editor.putString(A_PREF_CITY, cites[index]);
+                editor.putBoolean(A_PREF_EXISTS, true);
+                editor.apply();
+                cityItem.setTitle(getString(R.string.selected_city, txt, prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
+            }
+        });
+    }
+
+    protected void onRestart() {
+        super.onRestart();
+        loadProject(openedPrj, true, false);
+    }
 
     private class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.MyViewHolder> {
         private PlaceList<Place> places;
@@ -704,11 +856,6 @@ public class StartActivity extends AppCompatActivity
         }
     }
 
-    @Contract(pure = true)
-    private boolean p() {
-        return theProject == null;
-    }
-
     private Comparator<Place> obtainSelectedComparator() {
         int comparator = prefs.getInt(A_PREF_SELECTED_COMPARATOR, 0);
         switch (comparator) {
@@ -753,93 +900,10 @@ public class StartActivity extends AppCompatActivity
 
     }
 
-//    class Place implements Comparable<Place>, Cloneable {
-//        String name;
-//        float area;
-//        int power;
-//        long date;
-//
-//        private Place() {
-//        }
-//
-//        Place(@NonNull String name, long millis) {
-//            this.name = name;
-//            date = millis;
-//        }
-//
-//        @SuppressWarnings("unused")
-//        Place(@NonNull String name, long millis, int area, int power) {
-//            this.name = name;
-//            this.area = area;
-//            this.power = power;
-//        }
-//
-//        public int compareTo(@NonNull Place p) {
-//            return name.compareTo(p.name);
-//        }
-//
-//        public String toString() {
-//            return name;
-//        }
-//    }
-//
-//    class Room extends Place {
-//        Values cv;
-//        FloorValues fv;
-//        WallValues[] wv;
-//        float height;
-//        int insideTemper;
-//        boolean saved;
-//
-//
-//        Room(@NonNull String name, long millis) {
-//            this.name = name;
-//            this.date = millis;
-//            saved = false;
-//        }
-//
-//        Room(@NonNull String name, long millis, int area, int power,
-//             float height, int insideTemper, @NonNull WallValues[] wv,
-//             @NonNull Values cv, @NonNull FloorValues fv) {
-//            this.name = name;
-//            this.date = millis;
-//            this.area = area;
-//            this.power = power;
-//            saved = true;
-//            this.wv = wv;
-//            this.cv = cv;
-//            this.fv = fv;
-//            this.height = height;
-//            this.insideTemper = insideTemper;
-//            //it works only in case when Main activity is ready
-//            this.wv[0].lNumb = frag2.performed ? frag2.layerNum : 0;
-//            this.wv[1].lNumb = frag3.performed ? frag3.layerNum : 0;
-//            this.wv[2].lNumb = frag4.performed ? frag4.layerNum : 0;
-//            this.wv[3].lNumb = frag5.performed ? frag5.layerNum : 0;
-//        }
-//    }
-//
-//    private class PlaceList<T> extends ArrayList<T> {
-//        PlaceList(int initialCapacity) {
-//            super(initialCapacity);
-//        }
-//
-//        int indexOfPlaceWithName(@NonNull String name) {
-//            try {
-//                Field field = getClass().getDeclaredField("elementData");
-//                field.setAccessible(true);
-//                Place[] elementData = (Place[]) field.get(this);
-//                for (int i = 0; i < size(); i++)
-//                    if (name.equals(elementData[i].name))
-//                        return i;
-//            } catch (NoSuchFieldException e) {
-//                e.printStackTrace();
-//            } catch (IllegalAccessException e) {
-//                e.printStackTrace();
-//            }
-//            return -1;
-//        }
-//    }
+    @Contract(pure = true)
+    boolean p() {
+        return theProject == null;
+    }
 
     /**
      * The stub

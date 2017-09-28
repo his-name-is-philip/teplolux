@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -17,7 +18,6 @@ import java.util.Set;
 
 import ru.obrazcenter.teplolux.Fragment1.FloorValues;
 import ru.obrazcenter.teplolux.Fragment1.Values;
-
 
 import static ru.obrazcenter.teplolux.Main.A_PREF_PROJECT_NAMES;
 import static ru.obrazcenter.teplolux.Main.frag2;
@@ -174,7 +174,7 @@ enum ProjectLogics {
                 newName, prefs.getString(oldName, null)).commit();
     }
 
-    static boolean isThereARoomInProject(String name, String project) {
+    static boolean doesProjectContain(String name, String project) {
         return getPreferences(project).contains(name);
     }
 
@@ -198,12 +198,12 @@ enum ProjectLogics {
             date = millis;
         }
 
-        Place(@NonNull String name, long millis, int area, int power) {
-            this(name, millis);
-            this.name = name;
-            this.area = area;
-            this.power = power;
-        }
+//        Place(@NonNull String name, long millis, int area, int power) {
+//            this(name, millis);
+//            this.name = name;
+//            this.area = area;
+//            this.power = power;
+//        }
 
         public int compareTo(@NonNull Place p) {
             return name.compareTo(p.name);
@@ -220,6 +220,8 @@ enum ProjectLogics {
         WallValues[] wv;
         float height;
         int insideTemper;
+        int winType;
+        boolean isWinAlum;
         boolean saved;
 
 
@@ -231,17 +233,19 @@ enum ProjectLogics {
 
         Room(@NonNull String name, long millis, int area, int power,
              float height, int insideTemper, @NonNull WallValues[] wv,
-             @NonNull Values cv, @NonNull FloorValues fv) {
-            this.name = name;
-            this.date = millis;
+             @NonNull Values cv, @NonNull FloorValues fv, int winType, boolean isWinAlum) {
+            this(name, millis);
+            saved = true;
             this.area = area;
             this.power = power;
-            saved = true;
             this.wv = wv;
             this.cv = cv;
             this.fv = fv;
             this.height = height;
             this.insideTemper = insideTemper;
+            this.winType = winType;
+            this.isWinAlum = isWinAlum;
+
             //it works only in case when Main activity is ready
             this.wv[0].lNumb = frag2.performed ? frag2.layerNum : 0;
             this.wv[1].lNumb = frag3.performed ? frag3.layerNum : 0;
@@ -263,10 +267,10 @@ enum ProjectLogics {
                 for (int i = 0; i < size(); i++)
                     if (name.equals(elementData[i].name))
                         return i;
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                Log.e("PlaceList", "Can't access to field elementData");
+            } catch (NoSuchFieldException e) {
+                Log.e("PlaceList", "Can't find field elementData");
             }
             return -1;
         }

@@ -40,4 +40,10 @@
 
         </menu>
     </item>
+    <item
+        android:id="@+id/city_item"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="never"
+        />
 </menu>

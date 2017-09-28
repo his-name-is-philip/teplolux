@@ -7,6 +7,7 @@ android {
     defaultConfig {
         applicationId "ru.obrazcenter.teplolux"
         minSdkVersion 14
+        //noinspection OldTargetApi
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -17,6 +18,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        disable 'RestrictedApi'
     }
 }
 

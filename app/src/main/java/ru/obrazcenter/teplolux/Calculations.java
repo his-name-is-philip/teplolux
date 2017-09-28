@@ -1,11 +1,14 @@
 //Если этот код работает, его написал Соколов Филипп, а если нет, то не знаю, кто его писал.
 package ru.obrazcenter.teplolux;
 
+import android.widget.Toast;
+
 import org.jetbrains.annotations.Contract;
 
 import ru.obrazcenter.teplolux.ProjectLogics.Room;
 
 
+import static android.widget.Toast.LENGTH_SHORT;
 import static java.lang.Math.min;
 import static ru.obrazcenter.teplolux.Fragment1.FloorValues.GRUNT;
 import static ru.obrazcenter.teplolux.Fragment1.FloorValues.INTERFLOOR;
@@ -16,6 +19,7 @@ import static ru.obrazcenter.teplolux.Main.frag2;
 import static ru.obrazcenter.teplolux.Main.frag3;
 import static ru.obrazcenter.teplolux.Main.frag4;
 import static ru.obrazcenter.teplolux.Main.frag5;
+import static ru.obrazcenter.teplolux.Main.mainActivity;
 import static ru.obrazcenter.teplolux.StartActivity.activity1;
 import static ru.obrazcenter.teplolux.StartActivity.gson;
 
@@ -80,21 +84,23 @@ enum Calculations {
         float[][] k = {new float[4], new float[4], new float[4]}; //Коэффиценты тепло-ти, Вт/м*°С
         float glassR, wQ = 0, //Теплопотери 4-х стен
                 cQ, fQ, winQ = 0;
-        switch (frag1.getWindowType()) {
+        int winType = frag1.getWindowType();
+        boolean isWinAlum = frag1.alCB.isChecked();
+        switch (winType) {
             case 0: //Обычное (двойное) остекление
                 glassR = 0.44f;
                 break;
             case 1: //1к-й ст-т
-                glassR = frag1.alCB.isChecked() ? 0.34f : 0.38f;
+                glassR = isWinAlum ? 0.34f : 0.38f;
                 break;
             case 2: //1к-й ст-т с i
-                glassR = frag1.alCB.isChecked() ? 0.47f : 0.56f;
+                glassR = isWinAlum ? 0.47f : 0.56f;
                 break;
             case 3: //2-й ст-т
-                glassR = frag1.alCB.isChecked() ? 0.45f : 0.54f;
+                glassR = isWinAlum ? 0.45f : 0.54f;
                 break;
             case 4: //2-й ст-т с i
-                glassR = frag1.alCB.isChecked() ? 0.52f : 0.68f;
+                glassR = isWinAlum ? 0.52f : 0.68f;
                 break;
             default:
                 throw new RuntimeException("Неизвестный тип окон!");
@@ -138,7 +144,8 @@ enum Calculations {
                             k[n][i] = 0.22f;
                             break;
                         default:
-                            throw new RuntimeException("Неизвестный материал " + n + "-го слоя" + i + "-й стены");
+                            throw new RuntimeException("Неизвестный материал " + n + "-го слоя" + i
+                                    + "-й стены");
                     }
                     denominator += v[i].thicknesses[n] / k[n][i];
                     wQ += s[i] * T_DIFFERENCE / denominator;
@@ -163,9 +170,10 @@ enum Calculations {
                 .getString(roomName, "err"), ProjectLogics.Place.class).date;
 
         Room room = new Room(roomName, time, totalS, power,
-                HEIGHT, T_DIFFERENCE - temper, v, cValues, fValues);
+                HEIGHT, T_DIFFERENCE - temper, v, cValues, fValues, winType, isWinAlum);
         ProjectLogics.saveRoom(room, roomName, projectName);
 
+        Toast.makeText(mainActivity, "Помещение сохраненно!", LENGTH_SHORT).show();
         return ans;
     }
 

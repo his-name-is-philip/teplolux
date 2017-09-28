@@ -16,6 +16,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -51,7 +52,6 @@ import ru.obrazcenter.teplolux.Fragment1.FloorValues;
 import ru.obrazcenter.teplolux.Fragment1.Values;
 import ru.obrazcenter.teplolux.ProjectLogics.Room;
 
-
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.RED;
 import static android.support.v4.view.GravityCompat.START;
@@ -69,7 +69,7 @@ import static ru.obrazcenter.teplolux.Utils.closeKeyBrd;
 
 @SuppressLint("StaticFieldLeak")
 public class Main extends AppCompatActivity {
-    private SharedPreferences mSettings;
+    private SharedPreferences prefs;
     static final String APP_PREFERENCES = "my settings",
             A_PREF_CITY = "city",
             A_PREF_COLDEST_T = "coldest temper",
@@ -113,7 +113,6 @@ public class Main extends AppCompatActivity {
     private View progressBar;
 
     private Builder builder;
-    private boolean isCitySelected = false; // Only for city setup
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -149,15 +148,15 @@ public class Main extends AppCompatActivity {
         setupViewPager();
         ((TabLayout) findViewById(R.id.tabLayout)).setupWithViewPager(vp);
 
-        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageScrolled(int pos, float posOffset, int offsetPx) {
-                closeKeyBrd(Main.this);
-            }
-
+        vp.addOnPageChangeListener(new OnPageChangeListener() {
             public void onPageSelected(int p) {
             }
 
             public void onPageScrollStateChanged(int s) {
+            }
+
+            public void onPageScrolled(int pos, float posOffset, int offsetPx) {
+                closeKeyBrd(Main.this);
             }
         });
         findViewById(R.id.fab)
@@ -167,11 +166,10 @@ public class Main extends AppCompatActivity {
                         drawer.openDrawer(START);
                     }
                 });
-        mSettings = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-        cityBtn = (TextView) findViewById(R.id.cityBtn);
-        final String cityStr = mSettings.getString(A_PREF_CITY, null);
-        if (!mSettings.getBoolean(A_PREF_EXISTS, false)) {
-            SharedPreferences.Editor editor = mSettings.edit();
+        prefs = Utils.getPreferences(APP_PREFERENCES);
+        final String cityStr = prefs.getString(A_PREF_CITY, null);
+        if (!prefs.getBoolean(A_PREF_EXISTS, false)) {
+            SharedPreferences.Editor editor = prefs.edit();
             editor.putInt(A_PREF_COLDEST_T, 25);
             editor.putString(A_PREF_CITY, "Москва");
             editor.putBoolean(A_PREF_EXISTS, true);
@@ -190,10 +188,10 @@ public class Main extends AppCompatActivity {
                     onMyDialogExit();
                 }
             });
-        } else if (cityStr == null)
-            cityBtn.setText(getString(R.string.selected_temper, mSettings.getInt(A_PREF_COLDEST_T, 2147483647)));
-        else {
-            cityBtn.setText(getString(R.string.selected_city, cityStr, mSettings.getInt(A_PREF_COLDEST_T, 2147483647)));
+        } else if (cityStr != null) {
+            cityBtn.setText(getString(R.string.selected_city, cityStr, prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
+        } else {
+            cityBtn.setText(getString(R.string.selected_temper, prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
         }
         if (r.saved) new Handler().postDelayed(new Runnable() {
             public void run() {
@@ -239,7 +237,7 @@ public class Main extends AppCompatActivity {
                 int index = 0;
                 while (!TXT.equals(cites[index])) index++;
                 alert.dismiss();
-                SharedPreferences.Editor editor = mSettings.edit();
+                SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt(A_PREF_COLDEST_T, arr[index]);
                 editor.putString(A_PREF_CITY, cites[index]);
                 editor.putBoolean(A_PREF_EXISTS, true);
@@ -251,7 +249,6 @@ public class Main extends AppCompatActivity {
                 cityBtn.setText(getString(R.string.selected_city, cites[index], arr[index]));
                 alert.setOnCancelListener(null);
                 alert.setOnDismissListener(null);
-                isCitySelected = true;
                 if (drawer.isDrawerOpen(START)) onDrawerOpened(null); //Пересчитать
             }
         }
@@ -263,7 +260,7 @@ public class Main extends AppCompatActivity {
             if (v.getId() == R.id.enter_btn) {
                 alert.dismiss();
                 int value = -Integer.parseInt(values[np.getValue()]);
-                SharedPreferences.Editor editor = mSettings.edit();
+                SharedPreferences.Editor editor = prefs.edit();
                 editor.putInt(A_PREF_COLDEST_T, value);
                 editor.putString(A_PREF_CITY, null);
                 editor.putBoolean(A_PREF_EXISTS, true);
@@ -276,7 +273,7 @@ public class Main extends AppCompatActivity {
                 alert.setOnCancelListener(null);
                 alert.setOnDismissListener(null);
                 if (drawer.isDrawerOpen(drawer)) onDrawerOpened(null);
-            } else { // При клике на кнопку "Ввести температуру вручную"
+            } else {
                 Utils.closeKeyBrd(Main.this);
                 Utils.closeKeyBrd2(Main.this);
                 alert.setOnKeyListener(new DialogInterface.OnKeyListener() {
@@ -302,7 +299,7 @@ public class Main extends AppCompatActivity {
                 np.setMinValue(0);
                 np.setMaxValue(minValue - maxValue);
                 np.setDisplayedValues(values);
-                np.setValue(minValue + mSettings.getInt(A_PREF_COLDEST_T, 28));
+                np.setValue(minValue + prefs.getInt(A_PREF_COLDEST_T, 28));
 
                 TextView enterBtn = (TextView) alert.findViewById(R.id.enter_btn);
                 assert enterBtn != null;
@@ -363,7 +360,6 @@ public class Main extends AppCompatActivity {
             closeKeyBrd(Main.this);
             runOnUiThread(new Runnable() {
                 public void run() {
-                    cityBtn.setVisibility(VISIBLE);
                     if (!performed) {
                         performed = true;
                         progressBar = findViewById(R.id.progress_bar_nav);
@@ -372,13 +368,6 @@ public class Main extends AppCompatActivity {
                         errLV.setOnItemClickListener(MyToggle.this);
                         errAdapter = new ArrayAdapter<>(Main.this, R.layout.my_list_item, errList);
                         errLV.setAdapter(errAdapter);
-                        cityBtn = (TextView) findViewById(R.id.cityBtn);
-                        cityBtn.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                showMyDialog();
-                            }
-                        });
                         wTV = (TextView) findViewById(R.id.wQ);
                         cTV = (TextView) findViewById(R.id.cQ);
                         fTV = (TextView) findViewById(R.id.fQ);
@@ -386,7 +375,7 @@ public class Main extends AppCompatActivity {
                         totalTV = (TextView) findViewById(R.id.totalQ);
                         headerTV = (TextView) findViewById(R.id.nav_header);
                     }
-                    a = calculate(mSettings.getInt(A_PREF_COLDEST_T, 2147483647),
+                    a = calculate(prefs.getInt(A_PREF_COLDEST_T, 2147483647),
                             roomName, projectName);
 
                     if (a.err) {
@@ -750,6 +739,11 @@ public class Main extends AppCompatActivity {
                     }
                 }
             }
+
+            private void initWinType(int winType, boolean isWinAlum) {
+                frag1.winTypesSp.setSelection(winType);
+                if (winType > 0) frag1.alCB.setChecked(isWinAlum);
+            }
         }
         RoomLoading loading = new RoomLoading();
         //ceil
@@ -784,6 +778,8 @@ public class Main extends AppCompatActivity {
 
         //walls
         loading.initWalls(r.wv);
+        //windows
+        loading.initWinType(r.winType, r.isWinAlum);
         enableAutoAnimation();
     }
 
@@ -798,11 +794,9 @@ public class Main extends AppCompatActivity {
 
 
     private void onMyDialogExit() {
-        if (!isCitySelected) {
-            Toast.makeText(this, "ВНИМАНИЕ: Выбранный город: Москва", LENGTH_LONG).show();
-            alert.setOnCancelListener(null);
-            alert.setOnDismissListener(null);
-        }
+        Toast.makeText(this, "ВНИМАНИЕ: Выбранный город: Москва", LENGTH_LONG).show();
+        alert.setOnCancelListener(null);
+        alert.setOnDismissListener(null);
     }
 
     private void setupViewPager() {
@@ -852,7 +846,7 @@ public class Main extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case android.R.id.home:
-                Toast.makeText(this, "Закрытие проекта", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Закрытие помещения", Toast.LENGTH_SHORT).show();
                 finish();
                 overridePendingTransition(0, 0);
 //            new Handler().post(new Runnable() {

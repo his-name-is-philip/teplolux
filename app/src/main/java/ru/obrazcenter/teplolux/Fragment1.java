@@ -18,13 +18,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-
-import static android.content.res.Configuration.KEYBOARD_NOKEYS;
 import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static ru.obrazcenter.teplolux.Fragment1.FloorValues.GRUNT;
 import static ru.obrazcenter.teplolux.Fragment1.FloorValues.INTERFLOOR;
@@ -32,6 +30,7 @@ import static ru.obrazcenter.teplolux.Fragment1.FloorValues.LOGS;
 import static ru.obrazcenter.teplolux.Fragment1.FloorValues.WITH_UNDERGROUND;
 import static ru.obrazcenter.teplolux.Main.mainActivity;
 
+@SuppressWarnings("RestrictedApi")
 public class Fragment1 extends Fragment
         implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
     Spinner winTypesSp;
@@ -53,7 +52,6 @@ public class Fragment1 extends Fragment
     int fLNumber = 1;
 
     View fragV;
-    private NestedScrollView scrollV;
     LinearLayout layout;
     View plusC, minusC,
             plusF, minusF;
@@ -82,14 +80,15 @@ public class Fragment1 extends Fragment
         LayoutInflater inf = getLayoutInflater(savedInstanceState);
         fragV = inf.inflate(R.layout.fragment_1, null, false);
         layout = (LinearLayout) fragV.findViewById(R.id.layout_1);
-        scrollV = (NestedScrollView) fragV.findViewById(R.id.scrollView);
+        NestedScrollView scrollV = (NestedScrollView) fragV.findViewById(R.id.scrollView);
         scrollV.setOnScrollChangeListener(new OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int x, int y, int oldX, int oldY) {
                 CollapsingToolbarLayout collapsingLayout = ((Main) mainActivity).collapsingLayout;
-                if (y > Utils.toDp(28) && collapsingLayout.getTop() < collapsingLayout.getBottom()) {
+                if (y > Utils.toDp(28)
+                        && collapsingLayout.getTop() < collapsingLayout.getBottom())
+
                     ((Main) mainActivity).appBarLayout.setExpanded(false);
-                }
             }
         });
 
@@ -164,17 +163,7 @@ public class Fragment1 extends Fragment
         winTypesSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
-                if (pos == 0) alCB.setVisibility(GONE);
-                else {
-                    alCB.setVisibility(VISIBLE);
-                    scrollV.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            scrollV.fullScroll(ScrollView.FOCUS_DOWN);
-                        }
-                    }, 256);
-                    scrollV.setSmoothScrollingEnabled(true);
-                }
+                alCB.setVisibility(pos == 0 ? INVISIBLE : VISIBLE);
             }
 
             public void onNothingSelected(AdapterView<?> p) {

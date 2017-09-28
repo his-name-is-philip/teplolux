@@ -71,7 +71,6 @@ public class MyRippleView extends RelativeLayout {
     };
 
     private OnRippleCompleteListener onCompletionListener;
-    private Context context;
 
     boolean pressed; // only for background
     boolean longPressed = false; // only for background
@@ -117,7 +116,6 @@ public class MyRippleView extends RelativeLayout {
         canvasHandler = new Handler();
         zoomScale = typedArray.getFloat(R.styleable.RippleView_rv_zoomScale, 1.03f);
         zoomDuration = typedArray.getInt(R.styleable.RippleView_rv_zoomDuration, 200);
-        this.context = context;
         typedArray.recycle();
         paint = new Paint();
         paint.setAntiAlias(true);
@@ -151,16 +149,14 @@ public class MyRippleView extends RelativeLayout {
                     if (activity1.selectedRL.getId() != getId()) {
                         //Получение текста из name TextView
                         String name = ((TextView) findViewById(R.id.name_tv)).getText().toString();
-                        if (theProject == null)
-                            activity1.loadProject(name, true);
-                        else {
-                            activity1.loadRoom(name);
-                        }
+                        if (activity1.p())
+                            activity1.loadProject(name, true, true);
+                        else activity1.loadRoom(name);
                     }
-                }
+                } //Получение текста из name TextView
                 String name = ((TextView) findViewById(R.id.name_tv)).getText().toString();
-                if (theProject == null) //Получение текста из name TextView
-                    activity1.loadProject(name, true);
+                if (theProject == null)
+                    activity1.loadProject(name, true, true);
                 else
                     activity1.loadRoom(name);
                 return true;

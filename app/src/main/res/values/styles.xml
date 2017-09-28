@@ -10,7 +10,7 @@
     </style>
 
     <!--parent="Base.V7.Theme.AppCompat.Light"-->
-    <style name="CustomInputTheme">
+    <style name="CustomInputTheme" parent="Widget.Design.TextInputLayout">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -18,12 +18,12 @@
         <item name="android:windowContentOverlay">@drawable/toolbar_drop_shadow</item>
 
 
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="actionBarWidgetTheme">@null</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
 
         <!-- Panel attributes -->
     </style>
+    <!--<item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>-->
+    <!--<item name="actionBarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>-->
 
     <style name="NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
@@ -33,6 +33,15 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="FullscreenDialogTheme" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
 
 </resources>

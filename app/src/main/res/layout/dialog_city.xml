@@ -1,29 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingBottom="20dp"
-    android:id="@+id/city_layout"
-    android:focusableInTouchMode="true">
+    android:animateLayoutChanges="true"
+    android:background="@color/grayBackground"
+    android:fitsSystemWindows="true"
+    tools:context="ru.obrazcenter.teplolux.StartActivity">
 
-    <AutoCompleteTextView
+
+    <LinearLayout
+        android:id="@+id/city_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <AutoCompleteTextView
+            android:id="@+id/city_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_city"
+            android:inputType="textCapSentences" />
+
+        <Button
+            android:id="@+id/enter_temper_btn"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_temper"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/forBtns" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/city_et"
-        android:inputType="textCapSentences"
-        android:hint="@string/enter_city"/>
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="?android:attr/borderlessButtonStyle"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/enter_temper_btn"
-        android:text="@string/enter_temper"
-        android:textColor="@color/forBtns"/>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            tools:title="@string/enter_city" />
 
-</LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.design.widget.CoordinatorLayout>
