@@ -52,6 +52,7 @@ import ru.obrazcenter.teplolux.Fragment1.FloorValues;
 import ru.obrazcenter.teplolux.Fragment1.Values;
 import ru.obrazcenter.teplolux.ProjectLogics.Room;
 
+
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.RED;
 import static android.support.v4.view.GravityCompat.START;
@@ -91,7 +92,6 @@ public class Main extends AppCompatActivity {
             pageFocusLinks;
     private final ArrayList<String> errList = new ArrayList<>(40);
     private String roomName, projectName;
-    private TextView cityBtn;
     private String[] cites;
     private AlertDialog alert;
 
@@ -167,14 +167,12 @@ public class Main extends AppCompatActivity {
                     }
                 });
         prefs = Utils.getPreferences(APP_PREFERENCES);
-        final String cityStr = prefs.getString(A_PREF_CITY, null);
         if (!prefs.getBoolean(A_PREF_EXISTS, false)) {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt(A_PREF_COLDEST_T, 25);
             editor.putString(A_PREF_CITY, "Москва");
             editor.putBoolean(A_PREF_EXISTS, true);
             editor.apply();
-            cityBtn.setText(getString(R.string.selected_city, "Москва", 25));
             toggle.showMyDialog();
             alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
@@ -188,16 +186,12 @@ public class Main extends AppCompatActivity {
                     onMyDialogExit();
                 }
             });
-        } else if (cityStr != null) {
-            cityBtn.setText(getString(R.string.selected_city, cityStr, prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
-        } else {
-            cityBtn.setText(getString(R.string.selected_temper, prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
+            if (r.saved) new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    loadRoom(r);
+                }
+            }, 3000);
         }
-        if (r.saved) new Handler().postDelayed(new Runnable() {
-            public void run() {
-                loadRoom(r);
-            }
-        }, 3000);
     }
 
     private class MyToggle extends ActionBarDrawerToggle
@@ -246,7 +240,6 @@ public class Main extends AppCompatActivity {
                 Toast t = Toast.makeText(Main.this, cites[index] + ": -" + arr[index], LENGTH_LONG);
                 t.setGravity(Gravity.TOP, 0, 0);
                 t.show();
-                cityBtn.setText(getString(R.string.selected_city, cites[index], arr[index]));
                 alert.setOnCancelListener(null);
                 alert.setOnDismissListener(null);
                 if (drawer.isDrawerOpen(START)) onDrawerOpened(null); //Пересчитать
@@ -269,7 +262,6 @@ public class Main extends AppCompatActivity {
                 Toast t = Toast.makeText(Main.this, "Температура: -" + value, LENGTH_SHORT);
                 t.setGravity(Gravity.TOP, 0, 0);
                 t.show();
-                cityBtn.setText(value >= 0 ? getString(R.string.selected_temper, value) : getString(R.string.selected_temper2, -value));
                 alert.setOnCancelListener(null);
                 alert.setOnDismissListener(null);
                 if (drawer.isDrawerOpen(drawer)) onDrawerOpened(null);

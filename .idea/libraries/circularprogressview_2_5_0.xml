@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="circularprogressview-2.5.0">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/3d13a198a91b98e0446031fadbe1a81e0df4ee93/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/3d13a198a91b98e0446031fadbe1a81e0df4ee93/output/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.android/build-cache/fbe9b8fd5974f15acc863ae47f5efcc86516f47b/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/fbe9b8fd5974f15acc863ae47f5efcc86516f47b/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

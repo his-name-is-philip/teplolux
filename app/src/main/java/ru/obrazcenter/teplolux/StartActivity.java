@@ -140,11 +140,11 @@ public class StartActivity extends AppCompatActivity
         prefs = getPreferences(APP_PREFERENCES);
         setContentView(R.layout.app_bar_start);
         if (!prefs.getBoolean(A_PREF_EXISTS, false)) {
-            Editor editor = prefs.edit();
-            editor.putInt(A_PREF_COLDEST_T, 25);
-            editor.putString(A_PREF_CITY, "Москва");
-            editor.putBoolean(A_PREF_EXISTS, true);
-            editor.apply();
+//            Editor editor = prefs.edit();
+//            editor.putInt(A_PREF_COLDEST_T, 25);
+//            editor.putString(A_PREF_CITY, "Москва");
+//            editor.putBoolean(A_PREF_EXISTS, true);
+//            editor.apply();
             showCityDialog(true);
         }
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -790,11 +790,6 @@ public class StartActivity extends AppCompatActivity
                 cityItem.setTitle(getString(R.string.selected_city, txt, prefs.getInt(A_PREF_COLDEST_T, 2147483647)));
             }
         });
-    }
-
-    protected void onRestart() {
-        super.onRestart();
-        loadProject(openedPrj, true, false);
     }
 
     private class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.MyViewHolder> {
